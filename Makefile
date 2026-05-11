@@ -5,7 +5,7 @@ PROTO_SRC_DIR := proto
 PROTO_OUT_DIR := libs/common/src
 PROTO_FILES := $(shell find $(PROTO_SRC_DIR) -name "*.proto")
 
-.PHONY: venv install proto format lint typecheck test check clean
+.PHONY: venv install proto format lint typecheck test check run-payments-grpc clean
 
 venv:
 	$(PYTHON) -m venv venv
@@ -38,6 +38,9 @@ test:
 	pytest -q
 
 check: lint typecheck test
+
+run-payments-grpc:
+	$(PYTHON) -m seatly_payments.apps.grpc.main
 
 clean:
 	rm -rf .pytest_cache .ruff_cache .mypy_cache htmlcov .coverage coverage.xml

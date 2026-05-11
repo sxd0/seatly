@@ -82,6 +82,7 @@ exclude = [
 
 [[tool.mypy.overrides]]
 module = [
+    "grpc",
     "grpc.*",
 ]
 ignore_missing_imports = true
