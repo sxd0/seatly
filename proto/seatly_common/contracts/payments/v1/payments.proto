@@ -1,0 +1,44 @@
+syntax = "proto3";
+
+package seatly.payments.v1;
+
+service PaymentService {
+  rpc CreatePayment(CreatePaymentRequest) returns (CreatePaymentResponse);
+  rpc GetPayment(GetPaymentRequest) returns (GetPaymentResponse);
+}
+
+message CreatePaymentRequest {
+  string booking_id = 1;
+  string user_id = 2;
+  int64 amount_minor = 3;
+  string currency = 4;
+  string idempotency_key = 5;
+  string correlation_id = 6;
+}
+
+message CreatePaymentResponse {
+  string payment_id = 1;
+  PaymentStatus status = 2;
+}
+
+message GetPaymentRequest {
+  string payment_id = 1;
+  string correlation_id = 2;
+}
+
+message GetPaymentResponse {
+  string payment_id = 1;
+  string booking_id = 2;
+  string user_id = 3;
+  int64 amount_minor = 4;
+  string currency = 5;
+  PaymentStatus status = 6;
+}
+
+enum PaymentStatus {
+  PAYMENT_STATUS_UNSPECIFIED = 0;
+  PAYMENT_STATUS_PROCESSING = 1;
+  PAYMENT_STATUS_SUCCEEDED = 2;
+  PAYMENT_STATUS_FAILED = 3;
+  PAYMENT_STATUS_CANCELLED = 4;
+}

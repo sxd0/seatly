@@ -1,7 +1,11 @@
 PYTHON ?= python
 PIP ?= $(PYTHON) -m pip
 
-.PHONY: venv install format lint typecheck test check clean
+PROTO_SRC_DIR := proto
+PROTO_OUT_DIR := libs/common/src
+PROTO_FILES := $(shell find $(PROTO_SRC_DIR) -name "*.proto")
+
+.PHONY: venv install proto format lint typecheck test check clean
 
 venv:
 	$(PYTHON) -m venv venv
@@ -9,6 +13,15 @@ venv:
 install:
 	$(PIP) install --upgrade pip
 	$(PIP) install -e ".[dev]"
+
+proto:
+	$(PYTHON) -m grpc_tools.protoc \
+		-I$(PROTO_SRC_DIR) \
+		--python_out=$(PROTO_OUT_DIR) \
+		--grpc_python_out=$(PROTO_OUT_DIR) \
+		--pyi_out=$(PROTO_OUT_DIR) \
+		$(PROTO_FILES)
+	find libs/common/src/seatly_common/contracts -type d -exec touch {}/__init__.py \;
 
 format:
 	ruff format .
