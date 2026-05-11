@@ -5,7 +5,7 @@ PROTO_SRC_DIR := proto
 PROTO_OUT_DIR := libs/common/src
 PROTO_FILES := $(shell find $(PROTO_SRC_DIR) -name "*.proto")
 
-.PHONY: venv install proto format lint typecheck test check run-payments-grpc clean
+.PHONY: venv install proto format lint typecheck test check run-booking-api run-payments-grpc clean
 
 venv:
 	$(PYTHON) -m venv venv
@@ -38,6 +38,9 @@ test:
 	pytest -q
 
 check: lint typecheck test
+
+run-booking-api:
+	$(PYTHON) -m seatly_booking.apps.api.main
 
 run-payments-grpc:
 	$(PYTHON) -m seatly_payments.apps.grpc.main
